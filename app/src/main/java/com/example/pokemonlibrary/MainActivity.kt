@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.pokemonlibrary.navigation.PokemonNavigation
 import com.example.pokemonlibrary.ui.theme.PokemonLibraryTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-
+                PokemonNavigation()
             }
         }
     }
@@ -29,6 +30,6 @@ fun MyApp(content: @Composable () -> Unit){
 @Composable
 fun DefaultPreview() {
     MyApp {
-
+        PokemonNavigation()
     }
 }
