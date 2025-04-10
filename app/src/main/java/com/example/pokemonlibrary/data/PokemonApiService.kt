@@ -1,6 +1,6 @@
 package com.example.pokemonlibrary.data
 
-import com.example.pokemonlibrary.model.PokemonEvolutionChain
+import com.example.pokemonlibrary.model.PokemonEvolutionChainResponse
 import com.example.pokemonlibrary.model.PokemonResponse
 import com.example.pokemonlibrary.model.PokemonSpeciesResponse
 import retrofit2.http.GET
@@ -14,5 +14,5 @@ interface PokemonApiService{
     suspend fun getPokemonSpecies(@Path("id") id: Int): PokemonSpeciesResponse
 
     @GET("evolution-chain/{id}")
-    suspend fun getPokemonEvolutionChain(@Path("id") id: Int): PokemonEvolutionChain
+    suspend fun getPokemonEvolutionChain(@Path("id") id: Int): PokemonEvolutionChainResponse
 }
