@@ -1,5 +1,6 @@
 package com.example.pokemonlibrary.model.viewModel
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonlibrary.data.repository.PokemonRepository
@@ -9,6 +10,7 @@ import com.example.pokemonlibrary.model.PokemonSpeciesResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 
 class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewModel(){
@@ -21,17 +23,27 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
     private val _pokemonEvolutionChainData: MutableStateFlow<PokemonEvolutionChainResponse?> = MutableStateFlow(null)
     val pokemonEvolutionChainData: StateFlow<PokemonEvolutionChainResponse?> get() = _pokemonEvolutionChainData
 
+    init {
+        fetchPokemonData(Random.nextInt(1, 1302))
+    }
+
     fun fetchPokemonData(id: Int){
         viewModelScope.launch {
             try{
                 val pokemonData = pokemonRepository.getPokemon(id)
                 _pokemonData.value = pokemonData
 
-                val pokemonSpeciesData = pokemonRepository.getPokemonSpecies(pokemonData.species.url)
-                _pokemonSpeciesData.value = pokemonSpeciesData
+                pokemonData?.species?.url?.let { speciesUrl ->
+                    val pokemonSpeciesData = pokemonRepository.getPokemonSpecies(speciesUrl)
+                    _pokemonSpeciesData.value = pokemonSpeciesData
 
-                val pokemonEvolutionChainData = pokemonRepository.getPokemonEvolutionChain(pokemonSpeciesData.evolutionChain.url)
-                _pokemonEvolutionChainData.value = pokemonEvolutionChainData
+                    pokemonSpeciesData.evolutionChain?.url?.let { evolutionChainUrl ->
+                        val pokemonEvolutionChainData = pokemonRepository.getPokemonEvolutionChain(evolutionChainUrl)
+                        _pokemonEvolutionChainData.value = pokemonEvolutionChainData
+                    }
+                }
+
+
             }catch (e: Exception){
                 throw Exception("Error fetching the data: $e")
             }
