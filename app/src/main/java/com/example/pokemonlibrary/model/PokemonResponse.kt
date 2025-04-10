@@ -15,7 +15,16 @@ data class Form(
 )
 
 data class Sprites(
-    val other: OtherSprites
+    val other: OtherSprites,
+    @SerializedName("front_default")
+    val frontDefault: String,
+    @SerializedName("back_default")
+    val backDefault: String,
+    @SerializedName("front_shiny")
+    val frontShiny: String,
+    @SerializedName("back_shiny")
+    val backShiny: String,
+
 )
 
 data class OtherSprites(
