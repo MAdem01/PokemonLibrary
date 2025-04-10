@@ -64,4 +64,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.kotlinx.coroutines.android)
+
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }
