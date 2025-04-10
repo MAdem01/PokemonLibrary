@@ -1,5 +1,6 @@
-package com.example.pokemonlibrary.data
+package com.example.pokemonlibrary.data.retrofitClient
 
+import com.example.pokemonlibrary.data.remote.PokemonApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
