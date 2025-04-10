@@ -6,7 +6,8 @@ data class PokemonResponse(
     val forms: List<Form>,
     val height: Int,
     val stats: List<PokemonStat>,
-    val sprites: Sprites
+    val sprites: Sprites,
+    val species: Species
 )
 
 data class Form(
@@ -37,6 +38,11 @@ data class PokemonStat(
 )
 
 data class StatDetail(
+    val name: String,
+    val url: String
+)
+
+data class Species(
     val name: String,
     val url: String
 )
