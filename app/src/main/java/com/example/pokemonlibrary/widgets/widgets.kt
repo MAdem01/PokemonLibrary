@@ -184,7 +184,7 @@ fun EvolutionChain(evolutionSliderToggle: MutableState<Boolean>, pokemonEvolutio
 }
 
 @Composable
-fun HomeScreenButtons(pokemonViewModel: PokemonViewModel) {
+fun HomeScreenButtons(pokemonViewModel: PokemonViewModel, onAboutClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(top = 70.dp),
         horizontalArrangement = Arrangement.Center
@@ -192,7 +192,9 @@ fun HomeScreenButtons(pokemonViewModel: PokemonViewModel) {
         HomeScreenButton(
             text = "ABOUT",
             cardColor = CardDefaults.cardColors(containerColor = Color(0XFF1b1b1b))
-        )
+        ){
+            onAboutClick()
+        }
         Spacer(modifier = Modifier.width(20.dp))
         HomeScreenButton(
             text = "+",
