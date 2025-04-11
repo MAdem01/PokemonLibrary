@@ -3,12 +3,16 @@ package com.example.pokemonlibrary.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -29,6 +33,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.BottomBarContent
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
@@ -46,6 +51,12 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
         red = screenColor.red * 1.2f,
         green = screenColor.green * 1.2f,
         blue = screenColor.blue * 1.2f
+    )
+
+    val shadowColor = screenColor?.copy(
+        red = screenColor.red * 1.1f,
+        green = screenColor.green * 1.1f,
+        blue = screenColor.blue * 1.1f
     )
 
     screenColor?.let {
@@ -75,11 +86,36 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                             color = titleColor,
                             shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
                         ) {
-
+                            Column(modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center) {
+                                if(shadowColor != null){
+                                    Surface(
+                                        modifier = Modifier
+                                            .height(15.dp)
+                                            .width(60.dp),
+                                        color = shadowColor,
+                                        shape = GenericShape { size, _ ->
+                                            moveTo(0f, size.height / 2)
+                                            cubicTo(size.width / 6f, 0f,
+                                                5 * size.width / 6f, 0f,
+                                                size.width, size.height / 2)
+                                            cubicTo(5 * size.width / 6f, size.height,
+                                                size.width / 6f, size.height,
+                                                0f, size.height / 2)
+                                        },
+                                    ){}
+                                }
+                            }
                         }
                     }
                 }
             }
+            AsyncImage(
+                model = pokemonData?.sprites?.other?.officialArtwork?.frontShiny,
+                contentDescription = "Pokemon Image",
+                modifier = Modifier.size(450.dp).align(Alignment.Center).padding(bottom = 300.dp)
+            )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Arrow Back",
@@ -99,6 +135,7 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                 modifier = Modifier.width(200.dp).height(160.dp).align(Alignment.TopCenter),
                 tint = Color.Unspecified
             )
+
         }
     }
 
