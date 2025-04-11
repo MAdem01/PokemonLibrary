@@ -34,21 +34,15 @@ import com.example.pokemonlibrary.data.repository.PokemonRepository
 import com.example.pokemonlibrary.data.retrofitClient.RetroFitClient
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModelFactory
+import com.example.pokemonlibrary.navigation.PokemonScreens
 import com.example.pokemonlibrary.utils.getScreenColor
 import com.example.pokemonlibrary.widgets.HomeScreenButtons
 import com.example.pokemonlibrary.widgets.PokemonTitle
 
-@Preview
 @Composable
-fun HomeScreen(navController: NavController = rememberNavController()){
-    val pokemonService = RetroFitClient.api
-    val pokemonRepository = PokemonRepository(pokemonService)
-    val pokemonViewModel: PokemonViewModel = viewModel(
-        factory = PokemonViewModelFactory(pokemonRepository)
-    )
+fun HomeScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
     val pokemonData by pokemonViewModel.pokemonData.collectAsState()
     val pokemonSpeciesData by pokemonViewModel.pokemonSpeciesData.collectAsState()
-    val pokemonEvolutionChainImages by pokemonViewModel.pokemonEvolutionChainImages.collectAsState()
     val screenColor = pokemonSpeciesData?.color?.name?.let {
         colorResource(getScreenColor(it))
     }
@@ -88,7 +82,9 @@ fun HomeScreen(navController: NavController = rememberNavController()){
                                 contentDescription = "Pokemon Image",
                                 modifier = Modifier.height(300.dp).fillMaxWidth().padding()
                             )
-                            HomeScreenButtons(pokemonViewModel = pokemonViewModel)
+                            HomeScreenButtons(pokemonViewModel = pokemonViewModel){
+                                navController.navigate(route = PokemonScreens.ABOUT_SCREEN.name)
+                            }
                         }
                     }
                 }
