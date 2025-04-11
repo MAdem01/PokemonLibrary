@@ -7,7 +7,8 @@ data class PokemonResponse(
     val height: Int,
     val stats: List<PokemonStat>,
     val sprites: Sprites,
-    val species: Species
+    val species: Species,
+    val types: List<Type>
 )
 
 data class Form(
@@ -54,4 +55,13 @@ data class StatDetail(
 data class Species(
     val name: String,
     val url: String
+)
+
+data class Type(
+    @SerializedName("type")
+    val typeData: TypeData
+)
+
+data class TypeData(
+    val name: String
 )
