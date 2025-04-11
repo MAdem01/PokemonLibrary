@@ -32,12 +32,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.model.PokemonResponse
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 
@@ -141,23 +142,31 @@ fun PokemonImageRow(pokemonData: PokemonResponse?, imageSliderToggle: MutableSta
     }
 }
 
+@Preview
 @Composable
-fun TopBarContent() {
-    Row {
-        Text(
-            text = "Pokémons",
-            fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic,
-            fontFamily = FontFamily.Monospace,
-            fontSize = 19.sp
+fun BottomBarContent() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            painter = painterResource(R.drawable.menu_icon),
+            contentDescription = "Menu Icon",
+            tint = Color.Unspecified
         )
-        Spacer(modifier = Modifier.width(160.dp))
-        Text(
-            text = "Favourites",
-            fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic,
-            fontFamily = FontFamily.Monospace,
-            fontSize = 19.sp
+        Spacer(modifier = Modifier.width(15.dp))
+        Icon(
+            painter = painterResource(id = R.drawable.poke_ball),
+            contentDescription = "PokeBall Image",
+            modifier = Modifier.size(50.dp),
+            tint = Color.Unspecified
+        )
+        Spacer(modifier = Modifier.width(15.dp))
+        Icon(
+            painter = painterResource(id = R.drawable.favourite_icon),
+            contentDescription = "PokeBall Image",
+            modifier = Modifier.size(45.dp).padding(bottom = 5.dp),
+            tint = Color.Unspecified
         )
     }
 }
