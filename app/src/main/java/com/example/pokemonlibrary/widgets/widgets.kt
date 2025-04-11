@@ -47,11 +47,7 @@ fun PokemonStatCard(pokemonData: PokemonResponse?){
         modifier = Modifier
             .fillMaxWidth()
             .height(240.dp)
-            .padding(top = 45.dp, start = 10.dp, end = 10.dp),
-        border = BorderStroke(width = 1.dp, Color.Black),
-        shape = RoundedCornerShape(5.dp),
-        elevation = CardDefaults.cardElevation(5.dp)
-    ) {
+            .padding(top = 45.dp, start = 10.dp, end = 10.dp)) {
         Row(modifier = Modifier.padding(bottom = 15.dp, end = 10.dp),
             horizontalArrangement = Arrangement.Start){
             Column(
@@ -104,7 +100,7 @@ fun PokemonStatCard(pokemonData: PokemonResponse?){
 }
 
 @Composable
-fun PokemonImageRow(pokemonData: PokemonResponse?, imageToggle: MutableState<Boolean>){
+fun PokemonImageRow(pokemonData: PokemonResponse?, imageSliderToggle: MutableState<Boolean>){
     Card(modifier = Modifier
         .padding(start = 10.dp, end = 10.dp)
         .fillMaxWidth(),
@@ -117,13 +113,13 @@ fun PokemonImageRow(pokemonData: PokemonResponse?, imageToggle: MutableState<Boo
                 text = "Pokemon Images",
                 fontSize = 20.sp)
             Icon(
-                imageVector = if(imageToggle.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                imageVector = if(imageSliderToggle.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Down Arrow",
                 modifier = Modifier.clickable {
-                    imageToggle.value = !imageToggle.value
+                    imageSliderToggle.value = !imageSliderToggle.value
                 })
         }
-        if(imageToggle.value){
+        if(imageSliderToggle.value){
             HorizontalDivider(modifier = Modifier.height(3.dp), color = Color.Black)
             val pokemonImages = listOf(
                 pokemonData?.sprites?.frontShiny,
@@ -163,5 +159,42 @@ fun TopBarContent() {
             fontFamily = FontFamily.Monospace,
             fontSize = 19.sp
         )
+    }
+}
+
+@Composable
+fun EvolutionChain(evolutionSliderToggle: MutableState<Boolean>, pokemonEvolutionChainImages: List<String>?){
+    Card(modifier = Modifier
+        .padding(start = 10.dp, end = 10.dp)
+        .fillMaxWidth(),
+    ) {
+        Row(modifier = Modifier.padding(5.dp)) {
+            Text(
+                text = "Pokemon Evolution Chart",
+                fontSize = 20.sp)
+            Icon(
+                imageVector = if(evolutionSliderToggle.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                contentDescription = "Down Arrow",
+                modifier = Modifier.clickable {
+                    evolutionSliderToggle.value = !evolutionSliderToggle.value
+                })
+        }
+        if(evolutionSliderToggle.value){
+            HorizontalDivider(modifier = Modifier.height(3.dp), color = Color.Black)
+
+            pokemonEvolutionChainImages?.let { images ->
+                LazyRow {
+                    items(images){image ->
+                        VerticalDivider(
+                            modifier = Modifier.width(2.dp).height(160.dp),
+                            color = Color.Black)
+                        AsyncImage(
+                            model = image,
+                            contentDescription = "Pokemon Image",
+                            modifier = Modifier.size(160.dp))
+                    }
+                }
+            }
+        }
     }
 }

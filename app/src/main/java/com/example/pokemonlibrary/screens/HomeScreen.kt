@@ -4,13 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,11 +30,11 @@ import com.example.pokemonlibrary.data.repository.PokemonRepository
 import com.example.pokemonlibrary.data.retrofitClient.RetroFitClient
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModelFactory
+import com.example.pokemonlibrary.widgets.EvolutionChain
 import com.example.pokemonlibrary.widgets.PokemonImageRow
 import com.example.pokemonlibrary.widgets.PokemonStatCard
 import com.example.pokemonlibrary.widgets.TopBarContent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun HomeScreen(navController: NavController = rememberNavController()){
@@ -44,25 +44,25 @@ fun HomeScreen(navController: NavController = rememberNavController()){
         factory = PokemonViewModelFactory(pokemonRepository)
     )
     val pokemonData by pokemonViewModel.pokemonData.collectAsState()
-    val pokemonEvolutionChainData by pokemonViewModel.pokemonEvolutionChainData.collectAsState()
-    val imageToggle = remember { mutableStateOf(false)}
+    val pokemonEvolutionChainImages by pokemonViewModel.pokemonEvolutionChainImages.collectAsState()
+    val imageSliderToggle = remember { mutableStateOf(false)}
+    val evolutionSliderToggle = remember { mutableStateOf(false)}
 
     Box{
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        TopBarContent()
-                    }
-                )
+            bottomBar = {
+                BottomAppBar{
+                    TopBarContent()
+                }
             }
         ) { paddingValues ->
-            Surface(modifier = Modifier.padding(paddingValues)) {
+            Surface(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
                 Column {
                     PokemonStatCard(pokemonData = pokemonData)
                     Spacer(modifier = Modifier
                         .height(15.dp))
-                    PokemonImageRow(pokemonData = pokemonData, imageToggle = imageToggle)
+                    PokemonImageRow(pokemonData = pokemonData, imageSliderToggle = imageSliderToggle)
+                    EvolutionChain(evolutionSliderToggle = evolutionSliderToggle, pokemonEvolutionChainImages = pokemonEvolutionChainImages)
                 }
             }
         }

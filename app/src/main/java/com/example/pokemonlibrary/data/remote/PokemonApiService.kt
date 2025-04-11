@@ -8,7 +8,10 @@ import retrofit2.http.Path
 
 interface PokemonApiService{
     @GET("pokemon/{id}")
-    suspend fun getPokemon(@Path("id") id: Int): PokemonResponse
+    suspend fun getPokemonById(@Path("id") id: Int): PokemonResponse
+
+    @GET("pokemon/{name}")
+    suspend fun getPokemonByName(@Path("name") name: String): PokemonResponse
 
     @GET("pokemon-species/{id}")
     suspend fun getPokemonSpecies(@Path("id") id: Int): PokemonSpeciesResponse
