@@ -163,7 +163,7 @@ fun TopBarContent() {
 }
 
 @Composable
-fun EvolutionChain(evolutionSliderToggle: MutableState<Boolean>, pokemonEvolutionChainImages: List<String?>){
+fun EvolutionChain(evolutionSliderToggle: MutableState<Boolean>, pokemonEvolutionChainImages: List<String>?){
     Card(modifier = Modifier
         .padding(start = 10.dp, end = 10.dp)
         .fillMaxWidth(),
@@ -182,7 +182,7 @@ fun EvolutionChain(evolutionSliderToggle: MutableState<Boolean>, pokemonEvolutio
         if(evolutionSliderToggle.value){
             HorizontalDivider(modifier = Modifier.height(3.dp), color = Color.Black)
 
-            pokemonEvolutionChainImages.let { images ->
+            pokemonEvolutionChainImages?.let { images ->
                 LazyRow {
                     items(images){image ->
                         VerticalDivider(
