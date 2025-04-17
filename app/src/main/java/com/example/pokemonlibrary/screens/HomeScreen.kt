@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.BottomAppBar
-import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
+import com.example.pokemonlibrary.model.viewModel.pokemonViewModel.PokemonViewModel
 import com.example.pokemonlibrary.navigation.PokemonScreens
 import com.example.pokemonlibrary.utils.getScreenColor
 import com.example.pokemonlibrary.widgets.HomeScreenButtons
