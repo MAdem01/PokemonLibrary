@@ -44,7 +44,7 @@ import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.HomeScreenButton
 import com.example.pokemonlibrary.model.FlavorTextEntry
 import com.example.pokemonlibrary.model.PokemonResponse
-import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
+import com.example.pokemonlibrary.model.viewModel.pokemonViewModel.PokemonViewModel
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 import com.example.pokemonlibrary.utils.getPokemonTypeIcon
 import kotlin.random.Random
@@ -318,6 +318,45 @@ fun DescriptionCard(buttonColor: Color, flavorTextEntries: List<FlavorTextEntry>
                     cardColor = CardDefaults.cardColors(buttonColor)
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun PokemonScreenCards(pokemonData: List<PokemonResponse>){
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        pokemonData.chunked(4).map{ pokemons ->
+            Row {
+                pokemons.map{pokemon -> PokemonScreenCard(pokemon = pokemon)}
+            }
+        }
+    }
+}
+
+@Composable
+fun PokemonScreenCard(pokemon: PokemonResponse){
+    Card(
+        modifier = Modifier.height(130.dp).width(90.dp).padding(3.dp),
+        shape = RectangleShape,
+        colors = CardDefaults.cardColors(containerColor = Color(0XFFFDFFF5)),
+        elevation = CardDefaults.cardElevation(5.dp),
+        border = BorderStroke(width = 1.dp, Color.Black)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                model = pokemon.sprites.frontShiny,
+                contentDescription = "Pokemon Image",
+                modifier = Modifier.size(90.dp)
+            )
+            Text(
+                text = pokemon.species.name,
+                fontSize = 10.sp)
         }
     }
 }
