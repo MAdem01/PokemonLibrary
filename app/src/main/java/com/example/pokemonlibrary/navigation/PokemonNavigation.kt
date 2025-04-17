@@ -11,6 +11,7 @@ import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModelFactory
 import com.example.pokemonlibrary.screens.AboutScreen
 import com.example.pokemonlibrary.screens.HomeScreen
+import com.example.pokemonlibrary.screens.PokemonScreen
 
 @Composable
 fun PokemonNavigation(){
@@ -27,6 +28,9 @@ fun PokemonNavigation(){
         }
         composable(PokemonScreens.ABOUT_SCREEN.name){
             AboutScreen(navController = navController, pokemonViewModel = pokemonViewModel)
+        }
+        composable(PokemonScreens.POKEMON_SCREEN.name){
+            PokemonScreen(navController = navController)
         }
         composable(PokemonScreens.FAVOURITES_SCREEN.name){
 

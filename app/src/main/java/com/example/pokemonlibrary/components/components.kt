@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -25,12 +26,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.pokemonlibrary.R
+import com.example.pokemonlibrary.navigation.PokemonScreens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -69,32 +72,40 @@ fun HomeScreenButton(
     }
 }
 
-
-@Preview
 @Composable
-fun BottomBarContent() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            painter = painterResource(R.drawable.menu_icon),
-            contentDescription = "Menu Icon",
-            tint = Color.Unspecified
-        )
-        Spacer(modifier = Modifier.width(15.dp))
-        Icon(
-            painter = painterResource(id = R.drawable.poke_ball),
-            contentDescription = "PokeBall Image",
-            modifier = Modifier.size(75.dp),
-            tint = Color.Unspecified
-        )
-        Spacer(modifier = Modifier.width(15.dp))
-        Icon(
-            painter = painterResource(id = R.drawable.favourite_icon),
-            contentDescription = "PokeBall Image",
-            modifier = Modifier.size(45.dp).padding(bottom = 5.dp),
-            tint = Color.Unspecified
-        )
+fun BottomAppBar(navController: NavController) {
+    BottomAppBar(
+        modifier = Modifier
+            .height(100.dp)
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(40.dp)),
+        containerColor = Color.White
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.menu_icon),
+                contentDescription = "Menu Icon",
+                modifier = Modifier.clickable { navController.navigate(PokemonScreens.POKEMON_SCREEN.name) },
+                tint = Color.Unspecified
+            )
+            Spacer(modifier = Modifier.width(15.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.poke_ball),
+                contentDescription = "PokeBall Image",
+                modifier = Modifier.size(75.dp).clickable { navController.popBackStack() },
+                tint = Color.Unspecified
+            )
+            Spacer(modifier = Modifier.width(15.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.favourite_icon),
+                contentDescription = "PokeBall Image",
+                modifier = Modifier.size(45.dp).padding(bottom = 5.dp),
+                tint = Color.Unspecified
+            )
+        }
     }
 }
