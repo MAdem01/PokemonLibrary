@@ -1,12 +1,16 @@
 package com.example.pokemonlibrary.data.repository
 
-import android.util.Log
 import com.example.pokemonlibrary.data.remote.PokemonApiService
 import com.example.pokemonlibrary.model.PokemonEvolutionChainResponse
+import com.example.pokemonlibrary.model.PokemonListResponse
 import com.example.pokemonlibrary.model.PokemonResponse
 import com.example.pokemonlibrary.model.PokemonSpeciesResponse
 
 class PokemonRepository(private val apiService: PokemonApiService) {
+
+    suspend fun getPokemons(limit: Int, offset: Int): PokemonListResponse{
+        return apiService.getPokemonList(limit = limit, offset = offset)
+    }
 
     suspend fun getPokemonById(id: Int): PokemonResponse{
        return apiService.getPokemonById(id)

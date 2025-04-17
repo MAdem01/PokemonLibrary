@@ -1,6 +1,5 @@
-package com.example.pokemonlibrary.model.viewModel
+package com.example.pokemonlibrary.model.viewModel.pokemonViewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonlibrary.data.repository.PokemonRepository
@@ -51,28 +50,24 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
     }
 
     private suspend fun fetchPokemon(id: Int): PokemonResponse{
-        Log.d("ppp", "$id")
         val pokemonData = pokemonRepository.getPokemonById(id)
         _pokemonData.value = pokemonData
         return pokemonData
     }
 
     private suspend fun fetchPokemonSpeciesData(url: String): PokemonSpeciesResponse{
-        Log.d("ppp", "$url")
         val pokemonSpeciesData = pokemonRepository.getPokemonSpecies(url)
         _pokemonSpeciesData.value = pokemonSpeciesData
         return pokemonSpeciesData
     }
 
     private suspend fun fetchPokemonEvolutionData(url: String){
-        Log.d("ppp", "$url")
         val pokemonEvolutionData = pokemonRepository.getPokemonEvolutionChain(url)
         _pokemonEvolutionChainData.value = pokemonEvolutionData
         fetchPokemonEvolutionImages(pokemonEvolutionData)
     }
 
     private suspend fun fetchPokemonEvolutionImages(pokemonEvolutionChainData: PokemonEvolutionChainResponse){
-        Log.d("ppp", "${pokemonEvolutionChainData.evolutionChain}")
         _pokemonEvolutionChainImages.value =
             getAllPokemonNames(pokemonEvolutionChainData.evolutionChain).map { name ->
                 val pokemon = pokemonRepository.getPokemonByName(name)
