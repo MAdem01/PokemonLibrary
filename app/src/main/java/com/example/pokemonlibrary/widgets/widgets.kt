@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.HomeScreenButton
+import com.example.pokemonlibrary.model.FlavorTextEntry
 import com.example.pokemonlibrary.model.PokemonResponse
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
@@ -289,5 +290,34 @@ fun StatRow(pokemonData: PokemonResponse){
         StatCard(statName = "Health", statValue = pokemonData.stats[0].baseStat.toString(), statIcon = R.drawable.health_stat_icon, iconColor = Color.Red)
         Spacer(modifier = Modifier.width(10.dp))
         StatCard(statName = "Speed", statValue = pokemonData.stats[5].baseStat.toString(), statIcon = R.drawable.speed_stat_icon, iconColor = Color.Green)
+    }
+}
+
+@Composable
+fun DescriptionCard(buttonColor: Color, flavorTextEntries: List<FlavorTextEntry>){
+    Card(
+        modifier = Modifier.fillMaxWidth().height(250.dp).padding(top = 20.dp, start = 15.dp, end = 15.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(5.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(10.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = flavorTextEntries[0].flavorText)
+            Row {
+                HomeScreenButton(
+                    text = "ADD",
+                    cardColor = CardDefaults.cardColors(buttonColor)
+                )
+                Spacer(modifier = Modifier.width(40.dp))
+                HomeScreenButton(
+                    text = "EVOLUTIONS",
+                    cardColor = CardDefaults.cardColors(buttonColor)
+                )
+            }
+        }
     }
 }

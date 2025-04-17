@@ -3,10 +3,8 @@ package com.example.pokemonlibrary.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -47,12 +43,16 @@ import com.example.pokemonlibrary.components.BottomBarContent
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 import com.example.pokemonlibrary.utils.getScreenColor
+import com.example.pokemonlibrary.widgets.DescriptionCard
 import com.example.pokemonlibrary.widgets.StatRow
 
 @Composable
 fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
     val pokemonData by pokemonViewModel.pokemonData.collectAsState()
     val pokemonSpeciesData by pokemonViewModel.pokemonSpeciesData.collectAsState()
+    val flavorText = pokemonSpeciesData?.flavorTextEntries?.filter { flavorTextEntry ->
+        flavorTextEntry.language.name == "en"
+    }
 
     val screenColor = pokemonSpeciesData?.color?.name?.let {
         colorResource(getScreenColor(it))
@@ -126,7 +126,7 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                                 ) }
                                 Spacer(modifier = Modifier.height(20.dp))
                                 pokemonData?.let { pokemonData -> StatRow(pokemonData = pokemonData)}
-                                DescriptionCard(evolutionButtonColor = screenColor)
+                                flavorText?.let {DescriptionCard(buttonColor = screenColor, flavorTextEntries = it) }
                             }
                         }
                     }
@@ -156,25 +156,6 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                 modifier = Modifier.width(200.dp).height(160.dp).align(Alignment.TopCenter),
                 tint = Color.Unspecified
             )
-
-        }
-    }
-}
-
-@Composable
-fun DescriptionCard(evolutionButtonColor: Color){
-    Card(
-        modifier = Modifier.fillMaxWidth().height(250.dp).padding(top = 20.dp, start = 15.dp, end = 15.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(5.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom
-        ) {
-
 
         }
     }
