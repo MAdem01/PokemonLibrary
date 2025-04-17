@@ -1,16 +1,26 @@
 package com.example.pokemonlibrary.screens
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +36,9 @@ import com.example.pokemonlibrary.widgets.PokemonScreenCards
 @Composable
 fun PokemonScreen(navController: NavController, pokemonsViewModel: PokemonsViewModel){
     val pokemonsData by pokemonsViewModel.pokemonsData.collectAsState()
+    val page = remember { mutableIntStateOf(1) }
+    val offset = remember { mutableIntStateOf(0) }
+    val limit = 16
 
     Box{
         Scaffold(
@@ -34,7 +47,39 @@ fun PokemonScreen(navController: NavController, pokemonsViewModel: PokemonsViewM
             Surface(
                 modifier = Modifier.fillMaxSize()
             ) {
-                pokemonsData?.let {pokemonsData -> PokemonScreenCards(pokemonsData) }
+                Column(
+                   modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    pokemonsData?.let {pokemonsData -> PokemonScreenCards(pokemonsData) }
+                    Row(
+                        modifier = Modifier.padding(top = 10.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back Arrow",
+                            modifier = Modifier.clickable {
+                                if(page.intValue > 0) {
+                                    page.intValue--
+                                    offset.value -= 16
+                                    pokemonsViewModel.fetchPokemons(limit = limit, offset = offset.intValue)
+                                }
+                            })
+                        Text(
+                            text = page.intValue.toString(),
+                            modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "Forward Arrow",
+                            modifier = Modifier.clickable {
+                                    page.intValue++
+                                    offset.value += 16
+                                pokemonsViewModel.fetchPokemons(limit = limit, offset = offset.intValue)
+                            })
+
+                     }
+                }
             }
         }
         Icon(
