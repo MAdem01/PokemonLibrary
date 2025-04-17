@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.HomeScreenButton
 import com.example.pokemonlibrary.model.PokemonResponse
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
@@ -241,5 +243,51 @@ fun PokemonTitle(pokemonData: PokemonResponse?, titleColor: Color?) {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun StatCard(statName: String, statValue: String, statIcon: Int, iconColor: Color){
+    Card(
+        modifier = Modifier.width(80.dp).height(110.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(5.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = statIcon),
+                contentDescription = "Stat Icon",
+                modifier = Modifier.size(35.dp).fillMaxWidth().padding(bottom = 5.dp, top = 5.dp),
+                tint = iconColor
+            )
+            Text(
+                text = statName,
+                color = Color.LightGray,
+            )
+            Text(
+                text = statValue,
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun StatRow(pokemonData: PokemonResponse){
+    Row{
+        StatCard(statName = "Attack", statValue = pokemonData.stats[1].baseStat.toString(), statIcon = getPokemonTypeIcon(
+            pokemonData.types[0].typeData.name), iconColor = Color.Unspecified)
+        Spacer(modifier = Modifier.width(10.dp))
+        StatCard(statName = "Defense", statValue = pokemonData.stats[2].baseStat.toString(), statIcon = R.drawable.defense_stat_icon, iconColor = Color.Blue)
+        Spacer(modifier = Modifier.width(10.dp))
+        StatCard(statName = "Health", statValue = pokemonData.stats[0].baseStat.toString(), statIcon = R.drawable.health_stat_icon, iconColor = Color.Red)
+        Spacer(modifier = Modifier.width(10.dp))
+        StatCard(statName = "Speed", statValue = pokemonData.stats[5].baseStat.toString(), statIcon = R.drawable.speed_stat_icon, iconColor = Color.Green)
     }
 }
