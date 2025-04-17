@@ -6,6 +6,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,9 +19,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,13 +36,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.BottomBarContent
 import com.example.pokemonlibrary.model.viewModel.PokemonViewModel
+import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 import com.example.pokemonlibrary.utils.getScreenColor
+import com.example.pokemonlibrary.widgets.StatRow
 
 @Composable
 fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
@@ -87,13 +97,13 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                             shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
                         ) {
                             Column(modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center) {
+                                horizontalAlignment = Alignment.CenterHorizontally) {
                                 if(shadowColor != null){
+                                    Spacer(modifier = Modifier.height(30.dp))
                                     Surface(
                                         modifier = Modifier
-                                            .height(15.dp)
-                                            .width(60.dp),
+                                            .height(37.5.dp)
+                                            .width(140.dp),
                                         color = shadowColor,
                                         shape = GenericShape { size, _ ->
                                             moveTo(0f, size.height / 2)
@@ -106,6 +116,17 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                                         },
                                     ){}
                                 }
+                                Spacer(modifier = Modifier.height(10.dp))
+                                pokemonData?.species?.name?.let { Text(
+                                    text = it.capitalizeFirstLetter(),
+                                    fontSize = 40.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontStyle = FontStyle.Italic,
+                                    color = Color.White
+                                ) }
+                                Spacer(modifier = Modifier.height(20.dp))
+                                pokemonData?.let { pokemonData -> StatRow(pokemonData = pokemonData)}
+                                DescriptionCard(evolutionButtonColor = screenColor)
                             }
                         }
                     }
@@ -114,7 +135,7 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
             AsyncImage(
                 model = pokemonData?.sprites?.other?.officialArtwork?.frontShiny,
                 contentDescription = "Pokemon Image",
-                modifier = Modifier.size(450.dp).align(Alignment.Center).padding(bottom = 300.dp)
+                modifier = Modifier.size(525.dp).align(Alignment.Center).padding(bottom = 375.dp)
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -138,5 +159,23 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
 
         }
     }
+}
 
+@Composable
+fun DescriptionCard(evolutionButtonColor: Color){
+    Card(
+        modifier = Modifier.fillMaxWidth().height(250.dp).padding(top = 20.dp, start = 15.dp, end = 15.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(5.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
+
+
+        }
+    }
 }
