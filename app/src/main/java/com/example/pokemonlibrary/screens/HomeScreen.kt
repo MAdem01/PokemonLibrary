@@ -32,9 +32,8 @@ import com.example.pokemonlibrary.widgets.PokemonTitle
 
 @Composable
 fun HomeScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
-    val pokemonData by pokemonViewModel.pokemonData.collectAsState()
-    val pokemonSpeciesData by pokemonViewModel.pokemonSpeciesData.collectAsState()
-    val screenColor = pokemonSpeciesData?.color?.name?.let {
+    val pokemonData by pokemonViewModel.pokemon.collectAsState()
+    val screenColor = pokemonData?.color?.let {
         colorResource(getScreenColor(it))
     }
     val titleColor = screenColor?.copy(
@@ -59,7 +58,7 @@ fun HomeScreen(navController: NavController, pokemonViewModel: PokemonViewModel)
                     ) {
                         PokemonTitle(pokemonData = pokemonData, titleColor = titleColor)
                         AsyncImage(
-                            model = pokemonData?.sprites?.other?.officialArtwork?.frontShiny,
+                            model = pokemonData?.sprites?.official_artwork,
                             contentDescription = "Pokemon Image",
                             modifier = Modifier.height(300.dp).fillMaxWidth().padding()
                         )

@@ -30,15 +30,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.BottomAppBar
-import com.example.pokemonlibrary.model.viewModel.pokemonsViewModel.PokemonsViewModel
+import com.example.pokemonlibrary.model.viewModel.pokemonViewModel.PokemonViewModel
 import com.example.pokemonlibrary.widgets.PokemonScreenCards
 
 @Composable
-fun PokemonScreen(navController: NavController, pokemonsViewModel: PokemonsViewModel){
-    val pokemonsData by pokemonsViewModel.pokemonsData.collectAsState()
+fun PokemonScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
     val page = remember { mutableIntStateOf(1) }
     val offset = remember { mutableIntStateOf(0) }
-    val limit = 16
+    val pokemonsData by pokemonViewModel.pokemons.collectAsState()
 
     Box{
         Scaffold(
@@ -52,7 +51,7 @@ fun PokemonScreen(navController: NavController, pokemonsViewModel: PokemonsViewM
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    pokemonsData?.let {pokemonsData -> PokemonScreenCards(pokemonsData) }
+                    PokemonScreenCards(pokemonsData)
                     Row(
                         modifier = Modifier.padding(top = 10.dp)
                     ) {
@@ -63,7 +62,7 @@ fun PokemonScreen(navController: NavController, pokemonsViewModel: PokemonsViewM
                                 if(page.intValue > 0) {
                                     page.intValue--
                                     offset.value -= 16
-                                    pokemonsViewModel.fetchPokemons(limit = limit, offset = offset.intValue)
+                                    pokemonViewModel.loadPokemons(offset = offset.intValue)
                                 }
                             })
                         Text(
@@ -75,7 +74,7 @@ fun PokemonScreen(navController: NavController, pokemonsViewModel: PokemonsViewM
                             modifier = Modifier.clickable {
                                     page.intValue++
                                     offset.value += 16
-                                pokemonsViewModel.fetchPokemons(limit = limit, offset = offset.intValue)
+                                pokemonViewModel.loadPokemons(offset = offset.value)
                             })
 
                      }

@@ -42,12 +42,11 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.HomeScreenButton
-import com.example.pokemonlibrary.model.FlavorTextEntry
 import com.example.pokemonlibrary.model.PokemonResponse
+import com.example.pokemonlibrary.model.room.PokemonEntity
 import com.example.pokemonlibrary.model.viewModel.pokemonViewModel.PokemonViewModel
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 import com.example.pokemonlibrary.utils.getPokemonTypeIcon
-import kotlin.random.Random
 
 @Composable
 fun PokemonStatCard(pokemonData: PokemonResponse?){
@@ -211,18 +210,18 @@ fun HomeScreenButtons(pokemonViewModel: PokemonViewModel, onAboutClick: () -> Un
             text = "ROLL",
             cardColor = CardDefaults.cardColors(containerColor = Color(0XFF1b1b1b))
         ){
-            pokemonViewModel.fetchPokemonData(Random.nextInt(1,1025))
+            pokemonViewModel.loadRandomPokemon()
         }
     }
 }
 
 @Composable
-fun PokemonTitle(pokemonData: PokemonResponse?, titleColor: Color?) {
+fun PokemonTitle(pokemonData: PokemonEntity?, titleColor: Color?) {
     Column(
         modifier = Modifier.padding(start = 50.dp, end = 50.dp, bottom = 50.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        pokemonData?.species?.name?.let {
+        pokemonData?.name?.let {
             Text(
                 text = it.capitalizeFirstLetter(),
                 fontSize = 60.sp,
@@ -232,7 +231,7 @@ fun PokemonTitle(pokemonData: PokemonResponse?, titleColor: Color?) {
             )
         }
         Row {
-            pokemonData?.types?.get(0)?.typeData?.name?.let {
+            pokemonData?.types?.get(0)?.let {
                 Icon(
                     imageVector = ImageVector.vectorResource(getPokemonTypeIcon(it)),
                     contentDescription = "Pokemon Icon",
@@ -280,21 +279,21 @@ fun StatCard(statName: String, statValue: String, statIcon: Int, iconColor: Colo
 }
 
 @Composable
-fun StatRow(pokemonData: PokemonResponse){
+fun StatRow(pokemonData: PokemonEntity){
     Row{
-        StatCard(statName = "Attack", statValue = pokemonData.stats[1].baseStat.toString(), statIcon = getPokemonTypeIcon(
-            pokemonData.types[0].typeData.name), iconColor = Color.Unspecified)
+        StatCard(statName = "Attack", statValue = pokemonData.stats[1].base_stat.toString(), statIcon = getPokemonTypeIcon(
+            pokemonData.types[0]), iconColor = Color.Unspecified)
         Spacer(modifier = Modifier.width(10.dp))
-        StatCard(statName = "Defense", statValue = pokemonData.stats[2].baseStat.toString(), statIcon = R.drawable.defense_stat_icon, iconColor = Color.Blue)
+        StatCard(statName = "Defense", statValue = pokemonData.stats[2].base_stat.toString(), statIcon = R.drawable.defense_stat_icon, iconColor = Color.Blue)
         Spacer(modifier = Modifier.width(10.dp))
-        StatCard(statName = "Health", statValue = pokemonData.stats[0].baseStat.toString(), statIcon = R.drawable.health_stat_icon, iconColor = Color.Red)
+        StatCard(statName = "Health", statValue = pokemonData.stats[0].base_stat.toString(), statIcon = R.drawable.health_stat_icon, iconColor = Color.Red)
         Spacer(modifier = Modifier.width(10.dp))
-        StatCard(statName = "Speed", statValue = pokemonData.stats[5].baseStat.toString(), statIcon = R.drawable.speed_stat_icon, iconColor = Color.Green)
+        StatCard(statName = "Speed", statValue = pokemonData.stats[5].base_stat.toString(), statIcon = R.drawable.speed_stat_icon, iconColor = Color.Green)
     }
 }
 
 @Composable
-fun DescriptionCard(buttonColor: Color, flavorTextEntries: List<FlavorTextEntry>){
+fun DescriptionCard(buttonColor: Color, flavorTextEntry: String){
     Card(
         modifier = Modifier.fillMaxWidth().height(250.dp).padding(top = 20.dp, start = 15.dp, end = 15.dp),
         shape = RoundedCornerShape(10.dp),
@@ -306,7 +305,7 @@ fun DescriptionCard(buttonColor: Color, flavorTextEntries: List<FlavorTextEntry>
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = flavorTextEntries[0].flavorText)
+            Text(text = flavorTextEntry)
             Row {
                 HomeScreenButton(
                     text = "ADD",
@@ -323,7 +322,7 @@ fun DescriptionCard(buttonColor: Color, flavorTextEntries: List<FlavorTextEntry>
 }
 
 @Composable
-fun PokemonScreenCards(pokemonData: List<PokemonResponse>){
+fun PokemonScreenCards(pokemonData: List<PokemonEntity>){
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -337,7 +336,7 @@ fun PokemonScreenCards(pokemonData: List<PokemonResponse>){
 }
 
 @Composable
-fun PokemonScreenCard(pokemon: PokemonResponse){
+fun PokemonScreenCard(pokemon: PokemonEntity){
     Card(
         modifier = Modifier.height(130.dp).width(90.dp).padding(3.dp),
         shape = RectangleShape,
@@ -350,12 +349,12 @@ fun PokemonScreenCard(pokemon: PokemonResponse){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
-                model = pokemon.sprites.frontShiny,
+                model = pokemon.sprites.front_shiny,
                 contentDescription = "Pokemon Image",
                 modifier = Modifier.size(90.dp)
             )
             Text(
-                text = pokemon.species.name,
+                text = pokemon.name,
                 fontSize = 10.sp)
         }
     }
