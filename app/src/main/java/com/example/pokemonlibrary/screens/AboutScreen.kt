@@ -45,13 +45,10 @@ import com.example.pokemonlibrary.widgets.StatRow
 
 @Composable
 fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
-    val pokemonData by pokemonViewModel.pokemonData.collectAsState()
-    val pokemonSpeciesData by pokemonViewModel.pokemonSpeciesData.collectAsState()
-    val flavorText = pokemonSpeciesData?.flavorTextEntries?.filter { flavorTextEntry ->
-        flavorTextEntry.language.name == "en"
-    }
+    val pokemonData by pokemonViewModel.pokemon.collectAsState()
 
-    val screenColor = pokemonSpeciesData?.color?.name?.let {
+
+    val screenColor = pokemonData?.color?.let {
         colorResource(getScreenColor(it))
     }
     val titleColor = screenColor?.copy(
@@ -104,7 +101,7 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                                     ){}
                                 }
                                 Spacer(modifier = Modifier.height(10.dp))
-                                pokemonData?.species?.name?.let { Text(
+                                pokemonData?.name?.let{ Text(
                                     text = it.capitalizeFirstLetter(),
                                     fontSize = 40.sp,
                                     fontWeight = FontWeight.ExtraBold,
@@ -113,14 +110,14 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                                 ) }
                                 Spacer(modifier = Modifier.height(20.dp))
                                 pokemonData?.let { pokemonData -> StatRow(pokemonData = pokemonData)}
-                                flavorText?.let {DescriptionCard(buttonColor = screenColor, flavorTextEntries = it) }
+                                pokemonData?.flavorTextEntries?.get(0)?.text?.let {DescriptionCard(buttonColor = screenColor, flavorTextEntry = it) }
                             }
                         }
                     }
                 }
             }
             AsyncImage(
-                model = pokemonData?.sprites?.other?.officialArtwork?.frontShiny,
+                model = pokemonData?.sprites?.official_artwork,
                 contentDescription = "Pokemon Image",
                 modifier = Modifier.size(525.dp).align(Alignment.Center).padding(bottom = 375.dp)
             )
