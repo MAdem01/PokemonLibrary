@@ -38,6 +38,7 @@ import coil.compose.AsyncImage
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.BottomAppBar
 import com.example.pokemonlibrary.model.viewModel.pokemonViewModel.PokemonViewModel
+import com.example.pokemonlibrary.navigation.PokemonScreens
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 import com.example.pokemonlibrary.utils.getScreenColor
 import com.example.pokemonlibrary.widgets.DescriptionCard
@@ -135,7 +136,14 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
-                        navController.popBackStack()
+                        if(pokemonViewModel.isRandomPokemon.value){
+                            navController.popBackStack()
+                        }else{
+                            navController.navigate(PokemonScreens.POKEMON_SCREEN.name){
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                        }
                     }
                     .padding(start = 20.dp, top = 50.dp)
                     .align(Alignment.TopStart)

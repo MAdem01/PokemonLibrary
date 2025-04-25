@@ -86,7 +86,10 @@ fun PokemonScreen(navController: NavController, pokemonViewModel: PokemonViewMod
                     PokemonScreenCards(pokemonsData){ pokemon ->
                         pokemonViewModel.loadSelectedPokemon(pokemon)
                         pokemonViewModel.toggleIsRandomPokemonToFalse()
-                        navController.navigate(PokemonScreens.ABOUT_SCREEN.name)
+                        navController.navigate(PokemonScreens.ABOUT_SCREEN.name){
+                            popUpTo(navController.graph.startDestinationId)
+                            launchSingleTop = true
+                        }
                     }
                     PageController(pokemonViewModel, pokemonViewModel.searchValue.value)
                 }
