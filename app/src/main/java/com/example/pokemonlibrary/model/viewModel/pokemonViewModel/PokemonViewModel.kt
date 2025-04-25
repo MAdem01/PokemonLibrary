@@ -2,6 +2,7 @@ package com.example.pokemonlibrary.model.viewModel.pokemonViewModel
 
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonlibrary.data.repository.PokemonRepository
@@ -14,11 +15,17 @@ import kotlinx.coroutines.withContext
 
 class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() {
 
-    private val _pokemon = MutableStateFlow<PokemonEntity?>(null)
-    val pokemon: StateFlow<PokemonEntity?> get() = _pokemon
+    private val _randomPokemon = MutableStateFlow<PokemonEntity?>(null)
+    val randomPokemon: StateFlow<PokemonEntity?> get() = _randomPokemon
 
     private val _pokemons = MutableStateFlow<List<PokemonEntity>>(emptyList())
     val pokemons: StateFlow<List<PokemonEntity>> get() = _pokemons
+
+    private val _selectedPokemon = MutableStateFlow<PokemonEntity?>(null)
+    val selectedPokemon: StateFlow<PokemonEntity?> get() = _selectedPokemon
+
+    private val _isRandomPokemon = MutableStateFlow<Boolean>(true)
+    val isRandomPokemon: StateFlow<Boolean> get() = _isRandomPokemon
 
     private val _page = mutableIntStateOf(1)
     val page: State<Int> get() = _page
@@ -33,7 +40,7 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
 
     fun loadRandomPokemon() {
         viewModelScope.launch {
-            _pokemon.value = withContext(Dispatchers.IO) {
+            _randomPokemon.value = withContext(Dispatchers.IO) {
                 repository.getRandomPokemon()
             }
         }
@@ -43,6 +50,14 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
         viewModelScope.launch {
             _pokemons.value = withContext(Dispatchers.IO) {
                 repository.getPokemons(offset)
+            }
+        }
+    }
+
+    fun loadSelectedPokemon(pokemonName: String){
+        viewModelScope.launch {
+            _selectedPokemon.value = withContext(Dispatchers.IO){
+                repository.getPokemonByName(pokemonName)
             }
         }
     }
@@ -59,5 +74,13 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
             _offset.intValue -= 16
             loadPokemons(_offset.intValue)
         }
+    }
+
+    fun toggleIsRandomPokemonToFalse(){
+        _isRandomPokemon.value = false
+    }
+
+    fun toggleIsRandomPokemonToTrue(){
+        _isRandomPokemon.value = true
     }
 }

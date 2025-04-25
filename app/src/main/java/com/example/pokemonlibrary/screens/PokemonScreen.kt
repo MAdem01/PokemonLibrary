@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.components.BottomAppBar
 import com.example.pokemonlibrary.model.viewModel.pokemonViewModel.PokemonViewModel
+import com.example.pokemonlibrary.navigation.PokemonScreens
 import com.example.pokemonlibrary.widgets.PokemonScreenCards
 
 @Composable
@@ -47,7 +48,11 @@ fun PokemonScreen(navController: NavController, pokemonViewModel: PokemonViewMod
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    PokemonScreenCards(pokemonsData)
+                    PokemonScreenCards(pokemonsData){ pokemon ->
+                        pokemonViewModel.loadSelectedPokemon(pokemon)
+                        pokemonViewModel.toggleIsRandomPokemonToFalse()
+                        navController.navigate(PokemonScreens.ABOUT_SCREEN.name)
+                    }
                     Row(
                         modifier = Modifier.padding(top = 10.dp)
                     ) {

@@ -322,23 +322,27 @@ fun DescriptionCard(buttonColor: Color, flavorTextEntry: String){
 }
 
 @Composable
-fun PokemonScreenCards(pokemonData: List<PokemonEntity>){
+fun PokemonScreenCards(pokemonData: List<PokemonEntity>, onClick: (String) -> Unit){
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         pokemonData.chunked(4).map{ pokemons ->
             Row {
-                pokemons.map{pokemon -> PokemonScreenCard(pokemon = pokemon)}
+                pokemons.map{pokemon -> PokemonScreenCard(pokemon = pokemon){
+                    onClick(pokemon.name)
+                } }
             }
         }
     }
 }
 
 @Composable
-fun PokemonScreenCard(pokemon: PokemonEntity){
+fun PokemonScreenCard(pokemon: PokemonEntity, onClick: () -> Unit){
     Card(
-        modifier = Modifier.height(130.dp).width(90.dp).padding(3.dp),
+        modifier = Modifier.height(130.dp).width(90.dp).padding(3.dp).clickable {
+            onClick()
+        },
         shape = RectangleShape,
         colors = CardDefaults.cardColors(containerColor = Color(0XFFFDFFF5)),
         elevation = CardDefaults.cardElevation(5.dp),
