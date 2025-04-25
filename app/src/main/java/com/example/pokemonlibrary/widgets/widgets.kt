@@ -15,10 +15,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -26,6 +29,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -50,143 +54,6 @@ import com.example.pokemonlibrary.model.room.PokemonEntity
 import com.example.pokemonlibrary.model.viewModel.pokemonViewModel.PokemonViewModel
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 import com.example.pokemonlibrary.utils.getPokemonTypeIcon
-
-@Composable
-fun PokemonStatCard(pokemonData: PokemonResponse?){
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(240.dp)
-            .padding(top = 45.dp, start = 10.dp, end = 10.dp)) {
-        Row(modifier = Modifier.padding(bottom = 15.dp, end = 10.dp),
-            horizontalArrangement = Arrangement.Start){
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                AsyncImage(
-                    modifier = Modifier.size(130.dp),
-                    model = pokemonData?.sprites?.other?.officialArtwork?.frontShiny,
-                    contentDescription = "Pokemon Image"
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Card(
-                    modifier = Modifier.padding(5.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    shape = RectangleShape,
-                    border = BorderStroke(width = 1.dp, color = Color.Black)
-                ) {
-                    pokemonData?.species?.name?.let { Text(
-                        text = it.capitalizeFirstLetter(),
-                        modifier = Modifier.padding(5.dp),
-                        fontWeight = FontWeight.Light,
-                        fontSize = 20.sp) }
-                }
-            }
-            VerticalDivider(
-                modifier = Modifier.width(4.dp).padding(top = 15.dp),
-                color = Color.Black)
-            Column {
-                Text(
-                    text = "Stats",
-                    fontWeight = FontWeight.SemiBold
-                )
-                LazyColumn {
-                    pokemonData?.let {
-                        items(it.stats){ item ->
-                            Text(text = item.stat.name)
-                            LinearProgressIndicator(
-                                progress = {
-                                    item.baseStat / 100f
-                                },
-                                modifier = Modifier.height(10.dp),
-                                strokeCap = StrokeCap.Round
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun PokemonImageRow(pokemonData: PokemonResponse?, imageSliderToggle: MutableState<Boolean>){
-    Card(modifier = Modifier
-        .padding(start = 10.dp, end = 10.dp)
-        .fillMaxWidth(),
-        shape = RoundedCornerShape(5.dp),
-        elevation = CardDefaults.cardElevation(5.dp),
-        border = BorderStroke(width = 1.dp, color = Color.Black)
-    ) {
-        Row(modifier = Modifier.padding(5.dp)) {
-            Text(
-                text = "Pokemon Images",
-                fontSize = 20.sp)
-            Icon(
-                imageVector = if(imageSliderToggle.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = "Down Arrow",
-                modifier = Modifier.clickable {
-                    imageSliderToggle.value = !imageSliderToggle.value
-                })
-        }
-        if(imageSliderToggle.value){
-            HorizontalDivider(modifier = Modifier.height(3.dp), color = Color.Black)
-            val pokemonImages = listOf(
-                pokemonData?.sprites?.frontShiny,
-                pokemonData?.sprites?.backDefault,
-                pokemonData?.sprites?.frontShiny,
-                pokemonData?.sprites?.backShiny)
-            LazyRow{
-                items(pokemonImages){item ->
-                    VerticalDivider(
-                        modifier = Modifier.width(2.dp).height(160.dp),
-                        color = Color.Black)
-                    AsyncImage(
-                        model = item,
-                        contentDescription = "Pokemon Image",
-                        modifier = Modifier.size(160.dp))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun EvolutionChain(evolutionSliderToggle: MutableState<Boolean>, pokemonEvolutionChainImages: List<String>?){
-    Card(modifier = Modifier
-        .padding(start = 10.dp, end = 10.dp)
-        .fillMaxWidth(),
-    ) {
-        Row(modifier = Modifier.padding(5.dp)) {
-            Text(
-                text = "Pokemon Evolution Chart",
-                fontSize = 20.sp)
-            Icon(
-                imageVector = if(evolutionSliderToggle.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = "Down Arrow",
-                modifier = Modifier.clickable {
-                    evolutionSliderToggle.value = !evolutionSliderToggle.value
-                })
-        }
-        if(evolutionSliderToggle.value){
-            HorizontalDivider(modifier = Modifier.height(3.dp), color = Color.Black)
-
-            pokemonEvolutionChainImages?.let { images ->
-                LazyRow {
-                    items(images){image ->
-                        VerticalDivider(
-                            modifier = Modifier.width(2.dp).height(160.dp),
-                            color = Color.Black)
-                        AsyncImage(
-                            model = image,
-                            contentDescription = "Pokemon Image",
-                            modifier = Modifier.size(160.dp))
-                    }
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun HomeScreenButtons(pokemonViewModel: PokemonViewModel, onAboutClick: () -> Unit) {
@@ -296,7 +163,7 @@ fun StatRow(pokemonData: PokemonEntity){
 }
 
 @Composable
-fun DescriptionCard(buttonColor: Color, flavorTextEntry: String){
+fun DescriptionCard(buttonColor: Color, flavorTextEntry: String, onEvolutionClick: () -> Unit){
     Card(
         modifier = Modifier.fillMaxWidth().height(250.dp).padding(top = 20.dp, start = 15.dp, end = 15.dp),
         shape = RoundedCornerShape(10.dp),
@@ -318,7 +185,9 @@ fun DescriptionCard(buttonColor: Color, flavorTextEntry: String){
                 HomeScreenButton(
                     text = "EVOLUTIONS",
                     cardColor = CardDefaults.cardColors(buttonColor)
-                )
+                ){
+                    onEvolutionClick()
+                }
             }
         }
     }
@@ -378,7 +247,7 @@ fun PageController(pokemonViewModel: PokemonViewModel, searchValue: String) {
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = "Back Arrow",
             modifier = Modifier.size(35.dp).clickable {
-                pokemonViewModel.loadPreviousPage(searchValue = searchValue)
+                pokemonViewModel.loadPreviousPage()
             })
         Text(
             text = pokemonViewModel.page.value.toString(),
@@ -389,8 +258,94 @@ fun PageController(pokemonViewModel: PokemonViewModel, searchValue: String) {
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = "Forward Arrow",
             modifier = Modifier.size(35.dp).clickable {
-                pokemonViewModel.loadNextPage(searchValue = searchValue)
+                pokemonViewModel.loadNextPage()
             })
 
+    }
+}
+
+
+@Composable
+fun EvolutionChart(evolutionData: MutableList<PokemonEntity?>, shadowColor: Color?, backgroundColor: Color, onBackClick: () -> Unit){
+    Surface(
+        modifier = Modifier
+            .padding(start = 5.dp, end = 5.dp, top = 15.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(5.dp),
+        color = backgroundColor,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.End
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Back Arrow",
+                modifier = Modifier.clickable {
+                    onBackClick()
+                },
+                tint = Color.Black
+            )
+            LazyRow(
+                modifier = Modifier.padding(top = 15.dp).fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                itemsIndexed(items = evolutionData){ index, pokemon ->
+                    EvolutionCard(index, pokemon, shadowColor)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EvolutionCard(
+    index: Int,
+    pokemon: PokemonEntity?,
+    shadowColor: Color?
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Stage ${index + 1}",
+            fontSize = 15.sp,
+            fontWeight = FontWeight.ExtraBold,
+            fontStyle = FontStyle.Italic,
+            color = Color.White
+        )
+        AsyncImage(
+            model = pokemon?.sprites?.official_artwork,
+            contentDescription = "Pokemon Image",
+            modifier = Modifier.size(120.dp)
+        )
+        Surface(
+            modifier = Modifier
+                .height(23.5.dp)
+                .width(100.dp),
+            color = shadowColor!!,
+            shape = GenericShape { size, _ ->
+                moveTo(0f, size.height / 2)
+                cubicTo(
+                    size.width / 6f, 0f,
+                    5 * size.width / 6f, 0f,
+                    size.width, size.height / 2
+                )
+                cubicTo(
+                    5 * size.width / 6f, size.height,
+                    size.width / 6f, size.height,
+                    0f, size.height / 2
+                )
+            },
+        ) {}
+        if (pokemon != null) {
+            Text(
+                text = pokemon.name.capitalizeFirstLetter(),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.ExtraBold,
+                fontStyle = FontStyle.Italic,
+                color = Color.White
+            )
+        }
     }
 }
