@@ -32,7 +32,7 @@ import com.example.pokemonlibrary.widgets.PokemonTitle
 
 @Composable
 fun HomeScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
-    val pokemonData by pokemonViewModel.pokemon.collectAsState()
+    val pokemonData by pokemonViewModel.randomPokemon.collectAsState()
     val screenColor = pokemonData?.color?.let {
         colorResource(getScreenColor(it))
     }
@@ -45,7 +45,7 @@ fun HomeScreen(navController: NavController, pokemonViewModel: PokemonViewModel)
     screenColor?.let{
         Box{
             Scaffold(
-                bottomBar = { BottomAppBar(navController = navController) },
+                bottomBar = { BottomAppBar(navController = navController)},
                 containerColor = screenColor
             ) { paddingValues ->
                 Surface(
@@ -63,6 +63,7 @@ fun HomeScreen(navController: NavController, pokemonViewModel: PokemonViewModel)
                             modifier = Modifier.height(300.dp).fillMaxWidth().padding()
                         )
                         HomeScreenButtons(pokemonViewModel = pokemonViewModel){
+                            pokemonViewModel.toggleIsRandomPokemonToTrue()
                             navController.navigate(route = PokemonScreens.ABOUT_SCREEN.name)
                         }
                     }
