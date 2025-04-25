@@ -89,21 +89,44 @@ fun BottomAppBar(navController: NavController) {
             Icon(
                 painter = painterResource(R.drawable.menu_icon),
                 contentDescription = "Menu Icon",
-                modifier = Modifier.clickable { navController.navigate(PokemonScreens.POKEMON_SCREEN.name) },
+                modifier = Modifier.clickable {
+                    navController.navigate(PokemonScreens.POKEMON_SCREEN.name) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }},
                 tint = Color.Unspecified
             )
             Spacer(modifier = Modifier.width(15.dp))
             Icon(
                 painter = painterResource(id = R.drawable.poke_ball),
                 contentDescription = "PokeBall Image",
-                modifier = Modifier.size(75.dp).clickable { navController.popBackStack() },
+                modifier = Modifier.size(75.dp).clickable {
+                    navController.navigate(PokemonScreens.HOME_SCREEN.name) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+
+                },
                 tint = Color.Unspecified
             )
             Spacer(modifier = Modifier.width(15.dp))
             Icon(
                 painter = painterResource(id = R.drawable.favourite_icon),
                 contentDescription = "PokeBall Image",
-                modifier = Modifier.size(45.dp).padding(bottom = 5.dp),
+                modifier = Modifier.size(45.dp).padding(bottom = 5.dp).clickable {
+                    navController.navigate(PokemonScreens.FAVOURITES_SCREEN.name) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 tint = Color.Unspecified
             )
         }

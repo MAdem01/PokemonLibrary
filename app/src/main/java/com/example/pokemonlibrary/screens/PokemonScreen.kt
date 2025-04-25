@@ -19,8 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,8 +33,6 @@ import com.example.pokemonlibrary.widgets.PokemonScreenCards
 
 @Composable
 fun PokemonScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
-    val page = remember { mutableIntStateOf(1) }
-    val offset = remember { mutableIntStateOf(0) }
     val pokemonsData by pokemonViewModel.pokemons.collectAsState()
 
     Box{
@@ -59,22 +55,16 @@ fun PokemonScreen(navController: NavController, pokemonViewModel: PokemonViewMod
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back Arrow",
                             modifier = Modifier.clickable {
-                                if(page.intValue > 0) {
-                                    page.intValue--
-                                    offset.value -= 16
-                                    pokemonViewModel.loadPokemons(offset = offset.intValue)
-                                }
+                                pokemonViewModel.loadPreviousPage()
                             })
                         Text(
-                            text = page.intValue.toString(),
+                            text = pokemonViewModel.page.value.toString(),
                             modifier = Modifier.padding(start = 10.dp, end = 10.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = "Forward Arrow",
                             modifier = Modifier.clickable {
-                                    page.intValue++
-                                    offset.value += 16
-                                pokemonViewModel.loadPokemons(offset = offset.value)
+                                    pokemonViewModel.loadNextPage()
                             })
 
                      }
