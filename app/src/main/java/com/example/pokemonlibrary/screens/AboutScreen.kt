@@ -22,7 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,15 +44,22 @@ import com.example.pokemonlibrary.navigation.PokemonScreens
 import com.example.pokemonlibrary.utils.capitalizeFirstLetter
 import com.example.pokemonlibrary.utils.getScreenColor
 import com.example.pokemonlibrary.widgets.DescriptionCard
+import com.example.pokemonlibrary.widgets.EvolutionChart
 import com.example.pokemonlibrary.widgets.StatRow
 
 @Composable
 fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel){
     val isRandom by pokemonViewModel.isRandomPokemon.collectAsState()
+    var evolutionToggle by remember { mutableStateOf(false) }
     val pokemonData = if (isRandom) {
         pokemonViewModel.randomPokemon.collectAsState().value
     } else {
         pokemonViewModel.selectedPokemon.collectAsState().value
+    }
+    val pokemonEvolutionChainData = if(isRandom){
+        pokemonViewModel.randomPokemonEvolutionList.collectAsState().value
+    }else{
+        pokemonViewModel.selectedPokemonEvolutionList.collectAsState().value
     }
 
 
@@ -117,7 +126,15 @@ fun AboutScreen(navController: NavController, pokemonViewModel: PokemonViewModel
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 StatRow(pokemonData = pokemonData)
-                                DescriptionCard(buttonColor = screenColor, flavorTextEntry = pokemonData.flavorTextEntries[0].text)
+                                if(!evolutionToggle){
+                                    DescriptionCard(buttonColor = screenColor, flavorTextEntry = pokemonData.flavorTextEntries[0].text){
+                                        evolutionToggle = !evolutionToggle
+                                    }
+                                }else{
+                                    EvolutionChart(evolutionData = pokemonEvolutionChainData, shadowColor = shadowColor, backgroundColor = titleColor){
+                                        evolutionToggle = !evolutionToggle
+                                    }
+                                }
                             }
                         }
                     }
