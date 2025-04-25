@@ -16,6 +16,8 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon_table LIMIT 16 OFFSET :offset")
     fun getPokemons(offset: Int): List<PokemonEntity>
 
+    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :searchValue || '%' LIMIT 16 OFFSET :offset")
+    fun getPokemonsWithSearchValue(offset: Int, searchValue: String): List<PokemonEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(pokemons: List<PokemonEntity>)

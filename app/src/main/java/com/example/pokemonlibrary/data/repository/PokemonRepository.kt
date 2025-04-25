@@ -13,6 +13,10 @@ class PokemonRepository(private val dao: PokemonDao) {
         return dao.getPokemons(offset)
     }
 
+    fun getPokemonsWithSearchValue(offset: Int, searchValue: String): List<PokemonEntity> {
+        return dao.getPokemonsWithSearchValue(offset, searchValue)
+    }
+
     fun insertAll(pokemons: List<PokemonEntity>) {
         dao.insertAll(pokemons)
     }

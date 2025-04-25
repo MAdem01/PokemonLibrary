@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -37,6 +39,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -361,5 +364,33 @@ fun PokemonScreenCard(pokemon: PokemonEntity, onClick: () -> Unit){
                 text = pokemon.name,
                 fontSize = 10.sp)
         }
+    }
+}
+
+
+@Composable
+fun PageController(pokemonViewModel: PokemonViewModel, searchValue: String) {
+    Row(
+        modifier = Modifier.padding(top = 20.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = "Back Arrow",
+            modifier = Modifier.size(35.dp).clickable {
+                pokemonViewModel.loadPreviousPage(searchValue = searchValue)
+            })
+        Text(
+            text = pokemonViewModel.page.value.toString(),
+            modifier = Modifier.size(35.dp).padding(top = 5.dp),
+            textAlign = TextAlign.Center
+        )
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+            contentDescription = "Forward Arrow",
+            modifier = Modifier.size(35.dp).clickable {
+                pokemonViewModel.loadNextPage(searchValue = searchValue)
+            })
+
     }
 }
