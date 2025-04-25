@@ -1,5 +1,7 @@
 package com.example.pokemonlibrary.model.viewModel.pokemonViewModel
 
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonlibrary.data.repository.PokemonRepository
@@ -18,11 +20,16 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
     private val _pokemons = MutableStateFlow<List<PokemonEntity>>(emptyList())
     val pokemons: StateFlow<List<PokemonEntity>> get() = _pokemons
 
+    private val _page = mutableIntStateOf(1)
+    val page: State<Int> get() = _page
+
+    private val _offset = mutableIntStateOf(0)
+    val offset: State<Int> get() = _offset
+
     init {
         loadRandomPokemon()
-        loadPokemons(0)
+        loadPokemons(_offset.intValue)
     }
-
 
     fun loadRandomPokemon() {
         viewModelScope.launch {
@@ -32,11 +39,25 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
         }
     }
 
-    fun loadPokemons(offset: Int) {
+    fun loadPokemons(offset: Int = _offset.intValue) {
         viewModelScope.launch {
             _pokemons.value = withContext(Dispatchers.IO) {
                 repository.getPokemons(offset)
             }
+        }
+    }
+
+    fun loadNextPage() {
+        _page.intValue++
+        _offset.intValue += 16
+        loadPokemons(_offset.intValue)
+    }
+
+    fun loadPreviousPage() {
+        if (_page.intValue > 1) {
+            _page.intValue--
+            _offset.intValue -= 16
+            loadPokemons(_offset.intValue)
         }
     }
 }
