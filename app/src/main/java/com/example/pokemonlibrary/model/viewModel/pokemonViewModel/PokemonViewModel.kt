@@ -27,6 +27,9 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
     private val _isRandomPokemon = MutableStateFlow<Boolean>(true)
     val isRandomPokemon: StateFlow<Boolean> get() = _isRandomPokemon
 
+    private val _searchValue = mutableStateOf("")
+    val searchValue: State<String> get() = _searchValue
+
     private val _page = mutableIntStateOf(1)
     val page: State<Int> get() = _page
 
@@ -47,9 +50,17 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
     }
 
     fun loadPokemons(offset: Int = _offset.intValue) {
-        viewModelScope.launch {
-            _pokemons.value = withContext(Dispatchers.IO) {
-                repository.getPokemons(offset)
+        if(searchValue.value.isEmpty()) {
+            viewModelScope.launch {
+                _pokemons.value = withContext(Dispatchers.IO) {
+                    repository.getPokemons(offset)
+                }
+            }
+        }else{
+            viewModelScope.launch {
+                _pokemons.value = withContext(Dispatchers.IO) {
+                    repository.getPokemonsWithSearchValue(offset, searchValue.value)
+                }
             }
         }
     }
@@ -62,13 +73,13 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
         }
     }
 
-    fun loadNextPage() {
+    fun loadNextPage(searchValue: String) {
         _page.intValue++
         _offset.intValue += 16
         loadPokemons(_offset.intValue)
     }
 
-    fun loadPreviousPage() {
+    fun loadPreviousPage(searchValue: String) {
         if (_page.intValue > 1) {
             _page.intValue--
             _offset.intValue -= 16
@@ -82,5 +93,9 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
 
     fun toggleIsRandomPokemonToTrue(){
         _isRandomPokemon.value = true
+    }
+
+    fun setSearchValue(value: String){
+        _searchValue.value = value
     }
 }
