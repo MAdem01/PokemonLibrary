@@ -30,6 +30,16 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
     private val _searchValue = mutableStateOf("")
     val searchValue: State<String> get() = _searchValue
 
+    private val _randomPokemonEvolutionList = MutableStateFlow<MutableList<PokemonEntity?>>(
+        mutableListOf()
+    )
+    val randomPokemonEvolutionList: StateFlow<MutableList<PokemonEntity?>> get() = _randomPokemonEvolutionList
+
+    private val _selectedPokemonEvolutionList = MutableStateFlow<MutableList<PokemonEntity?>>(
+        mutableListOf()
+    )
+    val selectedPokemonEvolutionList: StateFlow<MutableList<PokemonEntity?>> get() = _selectedPokemonEvolutionList
+
     private val _page = mutableIntStateOf(1)
     val page: State<Int> get() = _page
 
@@ -43,11 +53,18 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
 
     fun loadRandomPokemon() {
         viewModelScope.launch {
-            _randomPokemon.value = withContext(Dispatchers.IO) {
-                repository.getRandomPokemon()
+            withContext(Dispatchers.IO) {
+                val pokemon = repository.getRandomPokemon()
+                val evolutionList = pokemon.evolutionChain.map {
+                    repository.getPokemonByName(it)
+                }
+
+                _randomPokemon.value = pokemon
+                _randomPokemonEvolutionList.value = evolutionList.toMutableList()
             }
         }
     }
+
 
     fun loadPokemons(offset: Int = _offset.intValue) {
         if(searchValue.value.isEmpty()) {
@@ -67,19 +84,25 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
 
     fun loadSelectedPokemon(pokemonName: String){
         viewModelScope.launch {
-            _selectedPokemon.value = withContext(Dispatchers.IO){
-                repository.getPokemonByName(pokemonName)
+            withContext(Dispatchers.IO){
+                val pokemon = repository.getPokemonByName(pokemonName)
+                val evolutionList = pokemon.evolutionChain.map {
+                    repository.getPokemonByName(it)
+                }
+
+                _selectedPokemon.value = pokemon
+                _selectedPokemonEvolutionList.value = evolutionList.toMutableList()
             }
         }
     }
 
-    fun loadNextPage(searchValue: String) {
+    fun loadNextPage() {
         _page.intValue++
         _offset.intValue += 16
         loadPokemons(_offset.intValue)
     }
 
-    fun loadPreviousPage(searchValue: String) {
+    fun loadPreviousPage() {
         if (_page.intValue > 1) {
             _page.intValue--
             _offset.intValue -= 16
