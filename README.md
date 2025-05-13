@@ -8,7 +8,7 @@ This mobile app brings the world of Pokémon to your fingertips:
 
 📋 All Pokémon Screen: Browse or search the full Pokédex.
 
-📖 Details View: View stats, types, and abilities.
+📖 Details View: View stats, types, and evolutions.
 
 💾 Offline Support: Pokémon data is stored locally using RoomDB, so you can browse even without an internet connection.
 
