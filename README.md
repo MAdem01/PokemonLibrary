@@ -27,22 +27,22 @@ Material 3 – Sleek and responsive design system.
 
 📱 Screenshots & Features
 🏠 Main Screen – Randomizer
-<p align="center"> <img src="https://github.com/user-attachments/assets/randomizer-placeholder" alt="Randomizer Screen" width="250"/> </p>
+<p align="center"> <img src="screenshots/494356001_1369085034366725_6204314868962329093_n.jpg" width="250"/> <img src="screenshots/494356399_9950696288378989_8830066771313108294_n.jpg" width="250"/> <img src="screenshots/494357504_1404878704034228_5967385705310574548_n.jpg" width="250"/> </p>
 Tap to reveal a random Pokémon.
 
-Instantly displays name, image, and stats.
-
-📋 All Pokémon Screen
-<p align="center"> <img src="https://github.com/user-attachments/assets/all-pokemons-placeholder" alt="All Pokémon Screen" width="250"/> </p>
-View the complete Pokédex, even offline.
-
-Search by name to quickly find any Pokémon.
+Displays name, image, and stats in a stylish layout.
 
 📄 Pokémon Details Screen
-<p align="center"> <img src="https://github.com/user-attachments/assets/details-placeholder" alt="Pokémon Details" width="250"/> </p>
-Shows detailed stats, types, and abilities.
+<p align="center"> <img src="https://your-link/details1.png" width="250"/> <img src="https://your-link/details2.png" width="250"/> </p>
+Shows type, base stats, abilities, and evolutions.
 
-Designed for easy, fast access to Pokémon info.
+Clean layout for fast lookups and comparisons.
+
+📋 All Pokémon (Pokédex) Screen
+<p align="center"> <img src="https://your-link/pokedex.png" width="250"/> </p>
+Browse the entire Pokédex.
+
+Search by name with offline support.
 
 🚀 Future Improvements
 Filter by type (e.g., Grass, Electric, Ghost).
