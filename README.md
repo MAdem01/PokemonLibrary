@@ -27,19 +27,19 @@ Material 3 – Sleek and responsive design system.
 
 📱 Screenshots & Features
 🏠 Main Screen – Randomizer
-<p align="center"> <img src="screenshots/494356001_1369085034366725_6204314868962329093_n.jpg" width="250"/> <img src="screenshots/494356399_9950696288378989_8830066771313108294_n.jpg" width="250"/> <img src="screenshots/494357504_1404878704034228_5967385705310574548_n.jpg" width="250"/> </p>
+<p align="center"> <img src="screenshots/494356001_1369085034366725_6204314868962329093_n.jpg" width="250"/> <img src="screenshots/494360258_686167054318088_1495701296423828544_n.jpg" width="250"/> <img src="screenshots/494357504_1404878704034228_5967385705310574548_n.jpg" width="250"/> </p>
 Tap to reveal a random Pokémon.
 
 Displays name, image, and stats in a stylish layout.
 
 📄 Pokémon Details Screen
-<p align="center"> <img src="https://your-link/details1.png" width="250"/> <img src="https://your-link/details2.png" width="250"/> </p>
+<p align="center"> <img src="screenshots/494360235_728352996196863_7783770273121195276_n.jpg" width="250"/> <img src="screenshots/494356399_9950696288378989_8830066771313108294_n.jpg" width="250"/> </p>
 Shows type, base stats, abilities, and evolutions.
 
 Clean layout for fast lookups and comparisons.
 
 📋 All Pokémon (Pokédex) Screen
-<p align="center"> <img src="https://your-link/pokedex.png" width="250"/> </p>
+<p align="center"> <img src="screenshots/494357965_559098883910449_235413113180363228_n.jpg" width="250"/> </p>
 Browse the entire Pokédex.
 
 Search by name with offline support.
