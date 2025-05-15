@@ -1,15 +1,15 @@
 package com.example.pokemonlibrary.utils
 
 import android.content.Context
+import android.util.Log
 import com.example.pokemonlibrary.R
 import com.example.pokemonlibrary.data.repository.PokemonRepository
 import com.example.pokemonlibrary.model.room.PokemonDatabase
 import com.example.pokemonlibrary.model.room.PokemonEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 fun String.capitalizeFirstLetter(): String {
     return this.replaceFirstChar {
@@ -57,13 +57,17 @@ fun preloadDatabaseIfNeeded(context: Context, database: PokemonDatabase) {
     val dao = database.pokemonDao()
     val repository = PokemonRepository(dao)
 
-    CoroutineScope(Dispatchers.IO).launch {
+    runBlocking(Dispatchers.IO) {
         val count = repository.getPokemonCount()
         if (count == 0) {
-            val jsonString = context.assets.open("pokemon_data.json").bufferedReader().use { it.readText() }
+            val jsonString = context.assets.open("pokemon_data.json")
+                .bufferedReader()
+                .use { it.readText() }
+
             val pokemonListType = object : TypeToken<List<PokemonEntity>>() {}.type
             val pokemonList: List<PokemonEntity> = Gson().fromJson(jsonString, pokemonListType)
 
+            Log.d("pokemonn", "$pokemonList")
             repository.insertAll(pokemonList)
         }
     }
